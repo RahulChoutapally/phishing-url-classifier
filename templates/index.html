@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paciphish</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0b0f1e, #1a1935);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(128, 0, 255, 0.6), transparent);
+            border-radius: 50%;
+            z-index: 1;
+            animation: float 8s infinite alternate;
+        }
+
+        body::after {
+            top: auto;
+            bottom: -50px;
+            left: auto;
+            right: -50px;
+            background: radial-gradient(circle, rgba(0, 128, 255, 0.6), transparent);
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+            }
+            100% {
+                transform: translateY(-50px) translateX(50px);
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            background-color: transparent;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        header a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .hero h1 span {
+            color: #007bff;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
+        .hero form {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .hero input[type="text"] {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px 0 0 8px;
+            width: 300px;
+            font-size: 1em;
+            outline: none;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .hero input[type="text"]:focus {
+            border-color: #007bff;
+        }
+
+        .hero button {
+            padding: 12px 20px;
+            font-size: 1em;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .hero button:hover {
+            background-color: #0056b3;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .section {
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 40px;
+            color: #fff;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .section h2 {
+            font-size: 1.8em;
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 25px;
+            color: #fff;
+            background-color: #28a745;
+            margin-right: 10px;
+        }
+
+        .badge.bad {
+            background-color: #dc3545;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        .card p {
+            font-size: 0.9em;
+            color: #ddd;
+            margin-bottom: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        #embedded-urls-row {
+            display: none;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px 0;
+        }
+
+        #embedded-urls-row.show {
+            display: flex;
+        }
+
+        .embedded-url-card {
+            flex: 1 1 calc(33.333% - 20px);
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .embedded-url-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .toggle-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 0.9em;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#">Paciphish</a>
+    </header>
+    <div class="container">
+        <div class="hero">
+            <h1>Analyze <span>URLs</span> for Phishing</h1>
+            <p>Enter a URL to check if it's safe or suspicious, and analyze its embedded links.</p>
+            <form id="url-form">
+                <input type="text" id="url-input" placeholder="Enter URL to classify">
+                <button type="submit">Classify</button>
+            </form>
+        </div>
+
+        <div class="grid">
+            <div class="section">
+                <h2>Overall Classification</h2>
+                <p>The URL is classified as:</p>
+                <span id="overall-classification" class="badge">Loading...</span>
+            </div>
+
+            <div class="section">
+                <h2>Domain Validity</h2>
+                <p id="domain-validity">Checking domain validity...</p>
+            </div>
+
+            <div class="section">
+                <h2>Good/Bad URLs Percentage</h2>
+                <p id="good-percentage">Good: --%</p>
+                <p id="bad-percentage">Bad: --%</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Embedded URLs</h2>
+            <button id="toggle-embedded-urls" class="toggle-button">Show Embedded URLs</button>
+            <div id="embedded-urls-row">
+                <p>Loading embedded URLs...</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Paciphish. All rights reserved.</p>
+    </footer>
+    <script>
+        document.getElementById('url-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const urlInput = document.getElementById('url-input').value.trim();
+            if (!urlInput) {
+                alert('Please enter a URL to classify.');
+                return;
+            }
+
+            // Reset fields for new classification
+            document.getElementById('overall-classification').textContent = 'Loading...';
+            document.getElementById('overall-classification').className = 'badge';
+            document.getElementById('domain-validity').textContent = 'Checking domain validity...';
+            document.getElementById('good-percentage').textContent = 'Good: --%';
+            document.getElementById('bad-percentage').textContent = 'Bad: --%';
+            document.getElementById('embedded-urls-row').innerHTML = '<p>Loading embedded URLs...</p>';
+
+            try {
+                const response = await fetch('/classify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: urlInput })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to classify URL');
+                }
+
+                const result = await response.json();
+
+                // Update overall classification
+                const overallClassification = result.overall_classification;
+                const overallBadge = document.getElementById('overall-classification');
+                overallBadge.textContent = overallClassification;
+                overallBadge.className = `badge ${overallClassification.toLowerCase()}`;
+
+                // Trigger alert for bad classification
+                if (overallClassification === 'Bad') {
+                    alert('Do not use or click the input URL as it is a bad URL.');
+                }
+
+                // Update domain validity and percentages
+                document.getElementById('domain-validity').textContent = result.domain_validity;
+                document.getElementById('good-percentage').textContent = `Good: ${result.percentages.good}`;
+                document.getElementById('bad-percentage').textContent = `Bad: ${result.percentages.bad}`;
+
+                // Update embedded URLs
+                const embeddedUrlsContainer = document.getElementById('embedded-urls-row');
+                embeddedUrlsContainer.innerHTML = '';
+                result.embedded_urls.forEach((url) => {
+                    const urlCard = document.createElement('div');
+                    urlCard.className = 'embedded-url-card';
+                    urlCard.innerHTML = `
+                        <p>${url.url}</p>
+                        <span class="badge ${url.classification.toLowerCase()}">${url.classification}</span>
+                    `;
+                    embeddedUrlsContainer.appendChild(urlCard);
+                });
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+
+        document.getElementById('toggle-embedded-urls').addEventListener('click', function () {
+            const list = document.getElementById('embedded-urls-row');
+            if (list.classList.contains('show')) {
+                list.classList.remove('show');
+                this.textContent = 'Show Embedded URLs';
+            } else {
+                list.classList.add('show');
+                this.textContent = 'Hide Embedded URLs';
+            }
+        });
+    </script>
+</body>
+</html>

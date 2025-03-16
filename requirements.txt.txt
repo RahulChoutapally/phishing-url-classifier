@@ -1,0 +1,6 @@
+Flask
+gunicorn
+whois
+bs4
+requests
+scikit-learn
