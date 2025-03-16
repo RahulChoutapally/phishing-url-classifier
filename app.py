@@ -39,8 +39,8 @@ def extract_urls_from_html(base_url):
 # Function to check domain validity using WHOIS
 def check_domain_whois(domain):
     try:
-        domain_info = whois.whois(domain)
-        if domain_info.domain_name:
+        domain_info = whois.query(domain)  # Correct function for python-whois
+        if domain_info:
             return f"Domain {domain} is valid and registered."
         else:
             return f"Domain {domain} is not registered or might be incorrect."

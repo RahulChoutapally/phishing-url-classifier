@@ -1,6 +1,6 @@
 Flask
 gunicorn
-whois
+python-whois==0.7.3
 bs4
 requests
 scikit-learn
